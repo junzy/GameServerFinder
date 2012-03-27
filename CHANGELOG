@@ -1,3 +1,8 @@
+27 - March - 2012 - v0.6.3
+    > Fix bugs with CS server finder when no servers were found.
+    > Fix bug with java scrpit to prevent parsing JSON twice
+    > Add initial compatiblilty with pypy, lot more needs to be done
+
 27 - March - 2012 - v0.6.2
     > Changed CS Server Finder logic to work using unicast packet, it
     should now work from felicity and webserver.
