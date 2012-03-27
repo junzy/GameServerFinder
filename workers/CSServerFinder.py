@@ -1,4 +1,4 @@
-import sqlite3, struct, socket, time, json
+import sqlite3, struct, socket, time, json, traceback
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet.task import LoopingCall
 from twisted.internet import reactor
@@ -18,12 +18,12 @@ class CSServerFinder(DatagramProtocol):
 #                             "10.2.44.255", "10.2.8.255" , "10.3.3.255" , "10.3.4.255" , "10.4.3.255" , "10.5.2.255" ,
 #                             "172.17.16.255"]
             self.ipRanges = ["10.1.34.%s", "10.1.35.%s", "10.1.36.%s", "10.1.39.%s", "10.1.40.%s", "10.1.65.%s", "10.1.66.%s"]
-            self.transport.getHandle().setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
             self.lastSendTime = None
             self.pingerTask = LoopingCall(self.serverPinger)
             self.pingerTask.start(10.0)
         except Exception as e:
             print (e)
+            traceback.print_exc()
     
     def createDatabase (self):
         try:
@@ -42,6 +42,7 @@ class CSServerFinder(DatagramProtocol):
             self.dbConnection.commit()
         except Exception as e:
             print(e)
+            traceback.print_exc()
 
     def serverPinger (self):
         try:
@@ -51,13 +52,20 @@ class CSServerFinder(DatagramProtocol):
             for self.ipAddr in self.ipRanges:
                 for i in xrange(2, 254):
                     self.transport.write(self.magicString, (self.ipAddr % i, self.dstPort))
+            self.jsonString = '[{"serverIP":"Server IP", "serverPort":"Port", "serverName":"Server Name", "serverMapName":"Map", "serverType":"Type", "serverGameName":"Game Name", "serverPlayer":"Players", "serverPlayerMax":"Max Players", "serverLatency":"Latency"}]'
+            filePointer = open("../JSON/cs.json", 'w')
+            filePointer.write(json.dumps(self.jsonString))
+            filePointer.close()
         except Exception as e:
                 print(e)
+                traceback.print_exc()
 
     def datagramReceived (self, serverResponse, (host, port)):
         try:
             serverLatency = int((time.time() - self.lastSendTime)*1000)
             serverResponseList = serverResponse.split("\0")
+            if len(serverResponseList) >= 6 :
+		return
             serverIP, serverPort = serverResponseList[0].split("m")[1].split(":")
             serverName = serverResponseList[1]
             serverMapName = serverResponseList[2]
@@ -84,6 +92,7 @@ class CSServerFinder(DatagramProtocol):
             filePointer.close()
         except Exception as e:
             print(e)
+            traceback.print_exc()
 
 if __name__ == "__main__":
     reactor.listenUDP(0, CSServerFinder())

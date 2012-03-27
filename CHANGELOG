@@ -1,3 +1,8 @@
+27 - March - 2012 - v0.6.2
+    > Changed CS Server Finder logic to work using unicast packet, it
+    should now work from felicity and webserver.
+    > Fixed a few bugs in java script
+
 24 - March - 2012 - v0.6.1
     > Cleaned webpage even more, removed banner image and put text instead,
     as suggested by Himi. :p
