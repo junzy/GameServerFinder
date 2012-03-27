@@ -1,0 +1,15 @@
+CS Server Finder ->
+    > Make code compatible with pypy
+    > Improve Latency tracking system to give more accurate result
+    > Change pinging logic to ping different subnets at each funcation call in a loop
+    this will ensure that we don't run out of send buffer size and drop packets
+    > Add system to connect to a server and get a list of active players playing on the
+    server, also possible identify bots and show them as bots on the web page
+
+DOTA Server Finder ->
+    > Implement code to connect to BNET and get a list of server and players connected
+    to each server, using /games and /con
+    > BNET Protocol specification at : http://bhfiles.com/files/Battle.net/bnetdocs/sequence.html
+
+AOE Server Finder ->
+    > Implement code to find all running AOE Servers in campus
