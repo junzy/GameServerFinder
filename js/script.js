@@ -6,7 +6,6 @@ function fillCSTable() {
     $.getJSON(jsonURL, function (jsonObj) {
         tbodyElem = document.getElementById("csServers");
         tbodyElem.innerHTML = "";
-	jsonObj = JSON.parse(jsonObj);
         jsonDict = jsonObj[0];
         trElem = tbodyElem.insertRow(tbodyElem.rows.length);
         trElem.className = "csTopRow";
