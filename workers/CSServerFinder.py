@@ -48,7 +48,7 @@ class CSServerFinder(DatagramProtocol):
         try:
             self.dbCursor.execute('delete from cs')
             self.dbConnection.commit()
-            self.jsonString = {'serverIP':u'Server IP' , 'serverPort':u'Port', 'serverName':u'Server Name', 'serverMapName':u'Map', 'serverType':u'Type', 'serverGameName':u'Game Name', 'serverPlayer':u'Players', 'serverPlayerMax':u'Max Players', 'serverLatency':u'Latency'}
+            self.jsonString = [{'serverIP':u'Server IP' , 'serverPort':u'Port', 'serverName':u'Server Name', 'serverMapName':u'Map', 'serverType':u'Type', 'serverGameName':u'Game Name', 'serverPlayer':u'Players', 'serverPlayerMax':u'Max Players', 'serverLatency':u'Latency'}]
             filePointer = open("../JSON/cs.json", 'w')
             filePointer.write(json.dumps(self.jsonString))
             filePointer.close()
