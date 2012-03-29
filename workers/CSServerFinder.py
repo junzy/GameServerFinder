@@ -48,7 +48,7 @@ class CSServerFinder(DatagramProtocol):
         try:
             self.dbCursor.execute('delete from cs')
             self.dbConnection.commit()
-            self.jsonString = '[{"serverIP":"Server IP", "serverPort":"Port", "serverName":"Server Name", "serverMapName":"Map", "serverType":"Type", "serverGameName":"Game Name", "serverPlayer":"Players", "serverPlayerMax":"Max Players", "serverLatency":"Latency"}]'
+            self.jsonString = {'serverIP':u'Server IP' , 'serverPort':u'Port', 'serverName':u'Server Name', 'serverMapName':u'Map', 'serverType':u'Type', 'serverGameName':u'Game Name', 'serverPlayer':u'Players', 'serverPlayerMax':u'Max Players', 'serverLatency':u'Latency'})
             filePointer = open("../JSON/cs.json", 'w')
             filePointer.write(json.dumps(self.jsonString))
             filePointer.close()
@@ -86,7 +86,7 @@ class CSServerFinder(DatagramProtocol):
             self.dbConnection.commit()
             self.dbCursor.execute("select * from cs")
             self.jsonString = [dict((self.dbCursor.description[i][0], value) for i, value in enumerate(row)) for row in self.dbCursor.fetchall()]
-            self.jsonString.insert(0, { 'serverIP':u'Server IP' , 'serverPort':u'Port', 'serverName':u'Server Name', 'serverMapName':u'Map', 'serverType':u'Type', 'serverGameName':u'Game Name', 'serverPlayer':u'Players', 'serverPlayerMax':u'Max Players', 'serverLatency':u'Latency'})
+            self.jsonString.insert(0, {'serverIP':u'Server IP' , 'serverPort':u'Port', 'serverName':u'Server Name', 'serverMapName':u'Map', 'serverType':u'Type', 'serverGameName':u'Game Name', 'serverPlayer':u'Players', 'serverPlayerMax':u'Max Players', 'serverLatency':u'Latency'})
             filePointer = open("../JSON/cs.json", 'w')
             filePointer.write(json.dumps(self.jsonString))
             filePointer.close()
