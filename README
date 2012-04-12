@@ -14,7 +14,7 @@ Dependencies :
 
 1. Requires Python2.7 (http://www.python.org/)
 2. Requires lateset version of twisted module for python (http://twistedmatrix.com)
-3. Requires a HTTP webserver (like apache/nginx) or simple a browser if you want to use it only for yourself
+3. Requires a HTTP webserver (like apache/nginx) or simply a browser if you want to use it only for yourself
 ===================================================================================
 How To Use :
 
