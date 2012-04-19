@@ -1,7 +1,24 @@
-This little code find all the webserver running inside IIIT and display it as a nifty little page
-inside a browser.
+                 _____  _____  ___   _____  __  __  _____
+                | ___ \|  ___|/ _ \ |  _  \|  \/  ||  ___|
+                | |_/ /| |__ / /_\ \| | | || .  . || |__  
+                |    / |  __||  _  || | | || |\/| ||  __| 
+                | |\ \ | |___| | | || |/ / | |  | || |___ 
+                \_| \_|\____/\_| |_/|___/  \_|  |_/\____/ 
 
-To start the Server:
+===================================================================================
+Discription :
+
+Find all multiplayer games being played inside campus with a nice browser based interface
+===================================================================================
+Dependencies :
+
+1. Requires Python2.7 (http://www.python.org/)
+2. Requires lateset version of twisted module for python (http://twistedmatrix.com)
+3. Requires a HTTP webserver (like apache/nginx) or simply a browser if you want to use it only for yourself
+===================================================================================
+How To Use :
+
+To start the Application:
     1. Make sure twisted library for python is installed
         sudo easy_install twisted
     2. Move the code to a folder inside the webserver root directory
@@ -9,7 +26,8 @@ To start the Server:
         #> cd workers
         #> python main.py
     4. Start the webserver
-
+===================================================================================
+Bugs :
 
 In case of any problem or suggestions drop me a mail at : argetlam.akshet [at] gmail [dot] com
 
@@ -17,6 +35,7 @@ If you would like to contribute, do check out the TODO for a list of tasks that 
 also if you find any bugs please report them at
         https://github.com/akshetpandey/GameServerFinder/issues
 If you can submit a patch for the bugs that would be awesome :)
+===================================================================================
 
 --
 Akshet Pandey
