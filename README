@@ -1,9 +1,9 @@
                  _____  _____  ___   _____  __  __  _____
                 | ___ \|  ___|/ _ \ |  _  \|  \/  ||  ___|
-                | |_/ /| |__ / /_\ \| | | || .  . || |__  
-                |    / |  __||  _  || | | || |\/| ||  __| 
-                | |\ \ | |___| | | || |/ / | |  | || |___ 
-                \_| \_|\____/\_| |_/|___/  \_|  |_/\____/ 
+                | |_/ /| |__ / /_\ \| | | || .  . || |__
+                |    / |  __||  _  || | | || |\/| ||  __|
+                | |\ \ | |___| | | || |/ / | |  | || |___
+                \_| \_|\____/\_| |_/|___/  \_|  |_/\____/
 
 ===================================================================================
 Discription :
@@ -22,12 +22,14 @@ To start the Application:
     1. Make sure twisted library for python is installed
         sudo easy_install twisted
     2. Move the code to a folder inside the webserver root directory
-    3. Start main.py in workers folder
+    3. Make sure that your webserver will use the .htacess file
+    4. Configure the settings file inside workers/ folder.
+    5. Start main.py in workers folder
         #> cd workers
         #> python main.py
-    4. Start the webserver
+    6. Start the webserver
 ===================================================================================
-Bugs :
+Bugs Reports :
 
 In case of any problem or suggestions drop me a mail at : argetlam.akshet [at] gmail [dot] com
 

@@ -1,3 +1,8 @@
+Road Map :
+
+v1 : CS complete stack implemented
+     website settings implemented
+
 CS Server Finder ->
     > Make code compatible with pypy
     > Improve Latency tracking system to give more accurate result
@@ -6,10 +11,14 @@ CS Server Finder ->
     > Add system to connect to a server and get a list of active players playing on the
     server, also possible identify bots and show them as bots on the web page
 
+v2 : BNET complete stack implemented
+     website themes implemented
+
 DOTA Server Finder ->
     > Implement code to connect to BNET and get a list of server and players connected
     to each server, using /games and /con
     > BNET Protocol specification at : http://bhfiles.com/files/Battle.net/bnetdocs/sequence.html
 
-AOE Server Finder ->
-    > Implement code to find all running AOE Servers in campus
+v3 : AOE and Starcraft searcher implemented
+     irc integration for live chat among players
+     rss feeds
