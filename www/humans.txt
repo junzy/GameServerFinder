@@ -1,46 +1,21 @@
-/* the humans responsible & colophon */
-/* humanstxt.org */
+# humanstxt.org/
+# The humans responsible & technology colophon
 
-
-/* TEAM */
+# TEAM
   Creator : Akshet Pandey
+  Main code base, CSServerFinder, main website
   Demo Site: http://felicity.iiit.ac.in/GSF
   Location: IIIT - Hyderabad
 
-/* THANKS */
+# THANKS
   Names (& URL): 
      1. Python  (http://www.python.org/)
      2. Twisted (http://twistedmatrix.com)
      3. Valve (https://developer.valvesoftware.com)
      4. HTML5 Boilerplate Developers (http://html5boilerplate.com)
 
-/* SITE */
+# TECHNOLOGY COLOPHON
   Standards: HTML5, CSS3
-  Components: Modernizr, jQuery
+  Components: HTML5boilerplate, bootstrap, jQuery
   Software: Python, Twisted
 
-
-
-                               -o/-
-                               +oo//-
-                              :ooo+//:
-                             -ooooo///-
-                             /oooooo//:
-                            :ooooooo+//-
-                           -+oooooooo///-
-           -://////////////+oooooooooo++////////////::
-            :+ooooooooooooooooooooooooooooooooooooo+:::-
-              -/+ooooooooooooooooooooooooooooooo+/::////:-
-                -:+oooooooooooooooooooooooooooo/::///////:-
-                  --/+ooooooooooooooooooooo+::://////:-
-                     -:+ooooooooooooooooo+:://////:--
-                       /ooooooooooooooooo+//////:-
-                      -ooooooooooooooooooo////-
-                      /ooooooooo+oooooooooo//:
-                     :ooooooo+/::/+oooooooo+//-
-                    -oooooo/::///////+oooooo///-
-                    /ooo+::://////:---:/+oooo//:
-                   -o+/::///////:-      -:/+o+//-
-                   :-:///////:-            -:/://
-                     -////:-                 --//:
-                       --                       -:
