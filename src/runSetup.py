@@ -1,19 +1,25 @@
 #!/usr/bin/env python
 
-from ConfigParser import *
+from ConfigParser import ConfigParser
 from os import listdir
 
-def setup():
+def startSetup():
     config = ConfigParser()
     moduleList = listdir("modules")
-
+    
+    config.add_section("global")
+    value = raw_input("Enter the JSON root folder to write the json files too : ")
+    config.set("global", "jsonRoot", value)
+    
     for module in moduleList:
-        loadedModule = __import__("modules." + module)
-        loadedModule.startConfig()
+        if module == "__init__.py" or module[-3:] != ".py":
+            continue
+        loadedModule = __import__("modules." + module[:-3], fromlist=["*"])
+        loadedModule.startConfig(config)
 
     configFile = open("server.cfg", "w")
     config.write(configFile)
     configFile.close()
 
 if __name__ == "__main__":
-    setup()
+    startSetup()

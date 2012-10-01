@@ -1,21 +1,22 @@
 #!/usr/bin/env python
 
 from twisted.internet import reactor
-
-import ConfigParser
+from ConfigParser import ConfigParser
+from os import listdir
 
 def startServer():
-    config = ConfigParser.ConfigParser()
+    config = ConfigParser()
     config.read(["server.cfg"])
     
-    moduleList = os.listdir("modules")
-
+    moduleList = listdir("modules")
+    
     for module in moduleList:
-        loadedModule = __import__("modules." + module)
+        if module == "__init__.py" or module[-3:] != ".py":
+            continue
+        loadedModule = __import__("modules." + module[:-3], fromlist=["*"])
         loadedModule.startModule(config)
     
     reactor.run()
-    return
 
-if __name__ == "main":
+if __name__ == "__main__":
     startServer()
