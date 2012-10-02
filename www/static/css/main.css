@@ -51,9 +51,7 @@
 }
 
 .mainFooter {
-    position : absolute;
     width : 100%;
-    bottom : 0px;
 }
 
 .footerTable {
@@ -103,11 +101,19 @@
 .csServerVersion { width: 100px;}
 
 .csPlayersDiv {
-    max-height:300px;
+    max-height:135px;
     overflow:auto;
 }
 
 .csPlayersTable {
     width:100%;
+}
+
+.gameTitle.csTitle input {
+    margin: 0;
+}
+
+.csPlayerCol {
+    width:33%;
 }
 

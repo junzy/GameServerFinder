@@ -24,13 +24,16 @@ function _cs_formatSecondsAsTime(totalSeconds) {
 function CSServerDisplay() {
 
     var _this = this;
+    _this.playSound = false;
+    _this.serverList = {};
+    _this.audioElement = $(document.createElement("audio")).attr("src", "static/ding.wav").attr("preload", "true");
     
     _this.fillTable = function () {
         $.ajax({
           url: "JSON/cs.json",
           data: "json",
           success: function(jsonObj){
-            var tableElem, trElem, tdElem,tableElem2, tbodyElem, count, divElem;
+            var tableElem, trElem, tdElem,tableElem2, tbodyElem, count, divElem, newServ = false, serverList = {};
             
             tableElem = $("#CSContentTable");
             tableElem.empty();
@@ -57,6 +60,10 @@ function CSServerDisplay() {
             count = 0;
             for (key in jsonObj) {
                 if (jsonObj.hasOwnProperty(key)) {
+                    if(!(key in _this.serverList)) {
+                        newServ = true;
+                    }
+                    serverList[key] = true;
                     serverDict = jsonObj[key];
                     trElem = $(document.createElement("tr")).addClass("csRows");
                     tdElem = $(document.createElement("td")).addClass("csServerName").append(serverDict.serverName);
@@ -118,6 +125,11 @@ function CSServerDisplay() {
                 }
             }
             
+            if (newServ && _this.playSound) {
+                _this.audioElement[0].play();
+            }
+            _this.serverList = serverList;
+            
             if (count === 0) {
                 trElem = $(document.createElement("tr")).addClass("csRows noServerRow");
                 tdElem = $(document.createElement("td")).attr("colspan", "7").append("No Server Running");
@@ -136,12 +148,17 @@ function CSServerDisplay() {
     
     _this.createDiv = function () {
         var div = $(document.createElement("div")).attr("id","CSContent");
-        div.append($(document.createElement("h2")).append("Counter - Strike").addClass("gameTitle csTitle"));
+        div.append($(document.createElement("h2")).append("Counter - Strike").addClass("gameTitle csTitle").append($(document.createElement("label")).append($(document.createElement("input")).attr("type", "checkbox").attr("id","csPingCheckBox")).append("Ping for new server")));
         var table = $(document.createElement("table")).attr("id","CSContentTable").addClass("serverList");
         var tbody = $(document.createElement("tbody"));
         table.append(tbody);
         div.append(table);
         $("#mainContent").append(div);
+        $("#csPingCheckBox").click(_this.toggleSound);
+    };
+    
+    _this.toggleSound = function () {
+        _this.playSound = $("#csPingCheckBox")[0].checked;
     };
     
     _this.removeDiv = function () {
