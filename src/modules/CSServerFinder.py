@@ -6,20 +6,6 @@ from twisted.internet.protocol import DatagramProtocol
 from twisted.internet.task import LoopingCall
 from twisted.internet import reactor
 
-"""
-Dictionary Format:
-  (ip, port) :
-    "name" : <string>
-    "map" : <string>
-    "latency" : <float>
-    "lastTS" : <float>
-    "challengeString" : <string>
-    "players" : <int>
-    "type" : <string> ["gs"|"s"]
-    "playerInfo" :
-        "name" : <string>
-"""
-
 PACKETSIZE=1400
 
 WHOLE=-1
@@ -93,7 +79,7 @@ class CSServerFinder(DatagramProtocol):
             traceback.print_exc()
             
     def loadDefaults(self):
-        self.jsonRoot = "../../www/JSON/"
+        self.jsonRoot = "../www/JSON/"
         self.ipRanges = [IPNetwork("10.1.33.0/24"), IPNetwork("10.1.34.0/24")]
         self.portList = [27015]
         self.pingDelay = 10.0
@@ -134,6 +120,9 @@ class CSServerFinder(DatagramProtocol):
             filePointer.write(json.dumps(self.serverDict))
             filePointer.close()
             
+            for keys in self.serverDict:
+                if time.time() - self.serverDict[keys]["lastTS"] > 20:
+                    del self.serverDict[key]
             print self.serverDict
             
             self.lastSendTime = time.time()
@@ -162,8 +151,6 @@ class CSServerFinder(DatagramProtocol):
                 self._recv_A2S_INFO(serverResponse, serverInfo)
                 return
             
-            packet = SourceQueryPacket(serverResponse)
-            firstByte = packet.getByte()
             if firstByte == S2C_CHALLENGE:
                 self._recv_A2S_CHALLENGE(serverResponse, serverInfo)
                 return
@@ -190,6 +177,7 @@ class CSServerFinder(DatagramProtocol):
         else :
             self.serverDict[(str(host) + ":" + str(port))] = {}
             self.serverDict[(str(host) + ":" + str(port))]["latency"] = int((time.time() - self.lastSendTime)*1000)
+            self.serverDict[(str(host) + ":" + str(port))]["lastTS"] = time.time()
             self.serverDict[(str(host) + ":" + str(port))]["challenge"] = None
 
         packet = SourceQueryPacket(packet)
@@ -267,6 +255,7 @@ class CSServerFinder(DatagramProtocol):
 
     def _recv_A2S_PLAYER(self, packet, (host, port)):
         packet = SourceQueryPacket(packet)
+        discard = packet.getLong()
         discard = packet.getByte()
         numPlayers = packet.getByte()
         
@@ -292,6 +281,7 @@ class CSServerFinder(DatagramProtocol):
         
     def _recv_A2S_CHALLENGE(self, packet, (host, port)):
         packet = SourceQueryPacket(packet)
+        discard = packet.getLong()
         discard = packet.getByte()
         self.serverDict[(str(host) + ":" + str(port))]['challenge'] = packet.getLong()
         self._send_A2S_PLAYER(host, port)
