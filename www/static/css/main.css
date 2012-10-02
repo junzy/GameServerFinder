@@ -1,0 +1,113 @@
+@import url('themes/blackGold.css');
+
+@font-face {
+    font-family: "Inconsolata";
+    src: url("./Inconsolata.ttf") format("truetype");
+}
+
+
+.loadingDiv {
+    background-image: url('../images/loading.gif');
+}
+
+.mainHeader {
+    text-align : center;
+    font-size : 2em;
+    font-family: Inconsolata;
+}
+
+.container {
+    padding-top:10px;
+}
+
+.container h2 {
+    text-align: center;
+}
+
+.gameList {
+    text-align: center;
+}
+
+.gameListElement {
+    width: 100px;
+    margin: 0 10px;
+    padding: 5px 0;
+    border: 2px solid grey;
+    border-radius: 7px;
+    display: inline-block;
+    cursor: pointer;
+    vertical-align:middle;
+}
+
+.mainContent {
+    margin: auto;
+    width : 90%;
+}
+
+.gameTitle {
+    font-size : 2em;
+    vertical-align : middle;
+    text-align : center;
+}
+
+.mainFooter {
+    position : absolute;
+    width : 100%;
+    bottom : 0px;
+}
+
+.footerTable {
+    width : 100%;
+}
+
+.footerTable td {
+    width:33%;
+}
+
+.container {
+    width: 90%;
+}
+
+.mainContent {
+    width : 100%;
+}
+
+.serverList {
+    width : 99%;
+    margin : 4px 0.5%;
+    display: table;
+    border-collapse: separate;
+    border-spacing: 1px;
+    border-color: gray; 
+}
+
+.gameTitle {
+    font-size : 3em;
+    color: gray;
+}
+
+.csTitle {
+    vertical-align : middle;
+    text-align : center;
+}
+
+.serverList tr { text-align : center; }
+.noServerRow { text-align : center; }
+.csServerName { width : 200px; }
+.csServerIP { width : 200px; }
+.csServerMapName { width : 200px; }
+.csServerLatency { width : 100px; }
+.csServerPlayer { width : 100px; }
+.csServerPassword { width: 100px;}
+.csServerSecure { width: 100px;}
+.csServerVersion { width: 100px;}
+
+.csPlayersDiv {
+    max-height:300px;
+    overflow:auto;
+}
+
+.csPlayersTable {
+    width:100%;
+}
+

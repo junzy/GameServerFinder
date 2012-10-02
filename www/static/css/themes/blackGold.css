@@ -1,0 +1,79 @@
+.blackGold {
+    background-color: black !important;
+}
+
+.blackGold .mainHeader{
+    background-image: url('../../images/banner.jpg');
+}
+
+.blackGold a {
+    color: gold;
+    text-decoration: none;
+} 
+
+.blackGold a:hover {
+    color: gold;
+    text-decoration: none;
+} 
+
+.blackGold a:visited {
+    color: gold;
+    text-decoration: none;
+}
+
+.blackGold .mainHeader {
+    color: gold;
+}
+
+.blackGold .gameListElement {
+    border-color: gray;
+    background-color: gray;
+    opacity:0.5 !important;
+    color: white;
+}
+
+.blackGold .gameListElement.gameSelected {
+    border-color: gray;
+    background-color: gold;
+    opacity:0.5 !important;
+    color: black;
+}
+
+.blackGold .serverList {
+    border-color: gray;
+}
+
+.blackGold .mainFooter {
+    color : gray;
+}
+
+.blackGold .csTopRow {
+    background-color : #ffd700;
+    color : black;
+}
+
+.blackGold .csRows {
+    background-color : #aa9500;
+    color : black;
+}
+
+.blackGold .csPlayersTable {
+    border: 1px solid #aa9500;
+}
+
+.blackGold .csPlayerRow {
+    border: 1px solid #aa9500;
+    color: white;
+}
+.blackGold .csPlayerRow.csRows {
+    color:black !important;
+}
+
+.blackGold .csPlayerRow.csRows td{
+    border:1px solid black;
+}
+
+.blackGold .csPlayerRow td {
+    border: 1px solid #aa9500;
+}
+
