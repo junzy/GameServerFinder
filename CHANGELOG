@@ -1,3 +1,9 @@
+2- October - 2012 - v1.0a
+    > CS completely implemented
+    > Made module templatable, now we only need to create the corresponding
+    python and javascript file for each game that needs to be added
+    > Python and JS template added
+
 27 - March - 2012 - v0.6.3
     > Fix bugs with CS server finder when no servers were found.
     > Fix bug with java scrpit to prevent parsing JSON twice
