@@ -1,0 +1,55 @@
+function ModuleNameDisplay() {
+
+    var _this = this;
+    
+    _this.fillTable = function () {
+        $.ajax({
+          url: "JSON/ModuleName.json",
+          data: "json",
+          success: function(jsonObj){
+            //Fill Table with server info
+            }
+    })};
+    
+    _this.refreshTable = function () {
+        if (modules.ModuleName.enabled === false) return;
+        _this.fillTable();
+        setTimeout(function() {_this.refreshTable();}, parseInt(modules.ModuleName.refreshTime, 10) * 1000);
+    };
+    
+    _this.createDiv = function () {
+        //Create the required DIV element and require child element here
+        var div = $(document.createElement("div")).attr("id","ModuleNameContent");
+        $("#mainContent").append(div);
+    };
+
+    _this.removeDiv = function () {
+        $("#ModuleNameContent").remove();
+    };
+
+    _this.moduleToggle = function () {
+        $("#" + modules.ModuleName.moduleName).toggleClass("gameSelected");
+        if($("#" + modules.ModuleName.moduleName).hasClass("gameSelected")) {
+            modules.ModuleName.enabled = true;
+            _this.createDiv();
+            _this.refreshTable();
+        } else {
+            modules.ModuleName.enabled = false;
+            _this.removeDiv();
+        }
+    };
+    
+    $("#" + modules.ModuleName.moduleName).click(_this.moduleToggle);
+
+    if (modules.ModuleName.defaultEnabled) {
+        $("#" + modules.ModuleName.moduleName).addClass("gameSelected");
+        modules.ModuleName.enabled = true;
+        _this.createDiv();
+        _this.refreshTable();
+    }
+}
+
+$(document).ready(function () {
+    var worker = new ModuleNameDisplay();
+});
+

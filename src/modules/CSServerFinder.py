@@ -83,6 +83,7 @@ class CSServerFinder(DatagramProtocol):
         self.ipRanges = [IPNetwork("10.1.33.0/24"), IPNetwork("10.1.34.0/24")]
         self.portList = [27015]
         self.pingDelay = 10.0
+        self.moduleEnabled = True
     
     def loadConfig(self, config):
         moduleEnabled = config.get("cs", "moduleEnabled")

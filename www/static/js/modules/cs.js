@@ -1,4 +1,4 @@
-function formatSecondsAsTime(totalSeconds) {
+function _cs_formatSecondsAsTime(totalSeconds) {
     var hours, minutes, seconds;
     hours  = Math.floor(totalSeconds / 3600);
     minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
@@ -25,7 +25,7 @@ function CSServerDisplay() {
 
     var _this = this;
     
-    _this.fillCSTable = function () {
+    _this.fillTable = function () {
         $.ajax({
           url: "JSON/cs.json",
           data: "json",
@@ -108,7 +108,7 @@ function CSServerDisplay() {
                             trElem.append(tdElem);
                             tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].kills);
                             trElem.append(tdElem);
-                            tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(formatSecondsAsTime(playerList[i].time));
+                            tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(_cs_formatSecondsAsTime(playerList[i].time));
                             trElem.append(tdElem);
                             tableElem2.append(trElem);
                         }
@@ -128,10 +128,10 @@ function CSServerDisplay() {
         }
     })};
     
-    _this.refreshCSTable = function () {
+    _this.refreshTable = function () {
         if (modules.cs.enabled === false) return;
-        _this.fillCSTable();
-        setTimeout(function() {_this.refreshCSTable();}, parseInt(modules.cs.refreshTime, 10) * 1000);
+        _this.fillTable();
+        setTimeout(function() {_this.refreshTable();}, parseInt(modules.cs.refreshTime, 10) * 1000);
     };
     
     _this.createDiv = function () {
@@ -153,7 +153,7 @@ function CSServerDisplay() {
         if($("#" + modules.cs.moduleName).hasClass("gameSelected")) {
             modules.cs.enabled = true;
             _this.createDiv();
-            _this.refreshCSTable();
+            _this.refreshTable();
         } else {
             modules.cs.enabled = false;
             _this.removeDiv();
@@ -166,7 +166,7 @@ function CSServerDisplay() {
         $("#" + modules.cs.moduleName).addClass("gameSelected");
         modules.cs.enabled = true;
         _this.createDiv();
-        _this.refreshCSTable();
+        _this.refreshTable();
     }
 }
 
