@@ -297,6 +297,12 @@ class CSServerFinder(DatagramProtocol):
         self._send_A2S_PLAYER(host, port)
 
 def startConfig(config):
+    moduleConfig = {}
+    moduleConfig["moduleName"] = "cs"
+    moduleConfig["moduleTitle"] = "CS"
+    moduleConfig["defaultEnabled"] = "true"
+    moduleConfig["refreshTime"] = "10"
+    
     config.add_section("cs")
     while True:
         value = raw_input("Would you like the scanner for Counter Strike to be activated? (Y/N) :")
@@ -305,7 +311,7 @@ def startConfig(config):
             break
         elif value == "N" or value == "n" :
             config.set("cs", "moduleEnabled", "false")
-            return
+            return moduleConfig
         else :
             print "Please enter either Y or N"
     
@@ -350,11 +356,13 @@ def startConfig(config):
             test = int(value)
             if test >= 1 and test <= 3600:
                 config.set("cs", "pingDelay", value)
+                moduleConfig["refreshTime"] = value
                 break
             else :
                 print "Please enter a number between 1 and 3600"
         except :
             print value, "is not a valid number"
+    return moduleConfig
 
 def startModule(config):
     crawler = CSServerFinder()
