@@ -69,7 +69,7 @@ function CSServerDisplay() {
                     trElem.append(tdElem);
                     tdElem = $(document.createElement("td")).addClass("csServerPlayer").append(serverDict.numPlayers + "/" + serverDict.maxPlayers);
                     trElem.append(tdElem);
-                    if (serverDict.passworded === "1") {
+                    if (serverDict.passworded === 1) {
                         tdElem = $(document.createElement("td")).addClass("csServerPassword").append("Yes");
                     } else {
                         tdElem = $(document.createElement("td")).addClass("csServerPassword").append("No");                    
