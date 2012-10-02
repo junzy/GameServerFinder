@@ -84,7 +84,7 @@ function CSServerDisplay() {
                         playerList.sort(function(a,b) { return parseFloat(b.kills) - parseFloat(a.kills) } );
                     
                         trElem = $(document.createElement("tr")).addClass("csPlayersRow");
-                        tdElem = $(document.createElement("td")).addClass("csPlayersCol").attr("rowspan", "4").attr("colspan", "7");
+                        tdElem = $(document.createElement("td")).addClass("csPlayersCol").attr("colspan", "7");
                         tableElem2 = $(document.createElement("table")).addClass("csPlayersTable");
                         divElem = $(document.createElement("div")).addClass("csPlayersDiv");
                         divElem.append(tableElem2)
