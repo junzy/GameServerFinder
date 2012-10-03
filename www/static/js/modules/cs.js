@@ -36,6 +36,7 @@ function CSServerDisplay() {
         $.ajax({
           url: "JSON/cs.json",
           data: "json",
+          cache: false,
           success: function(jsonObj){
             var tableElem, trElem, tdElem,tableElem2, tbodyElem, count, divElem, newServ = false, serverList = {};
             
