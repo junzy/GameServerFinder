@@ -1,15 +1,10 @@
-Road Map :
+Things to be done :
 
-v1.1 : CS tracker should ping whenever a new server is found
+> BNET Server Pinger
+    DOTA Server Finder : Implement code to connect to BNET and get a list of server and players connected to each server, using /games and /con
+    BNET Protocol specification at : http://bhfiles.com/files/Battle.net/bnetdocs/sequence.html
 
-v2 : BNET complete stack implemented
-     website themes implemented
-
-DOTA Server Finder ->
-    > Implement code to connect to BNET and get a list of server and players connected
-    to each server, using /games and /con
-    > BNET Protocol specification at : http://bhfiles.com/files/Battle.net/bnetdocs/sequence.html
-
-v3 : AOE and Starcraft searcher implemented
-     irc integration for live chat among players
-     rss feeds
+> Themeable website
+> AOE and Starcraft searcher implemented
+> IRC integration for live chat among players
+> RSS Feeds
