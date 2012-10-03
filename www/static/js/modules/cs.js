@@ -3,21 +3,22 @@ function _cs_formatSecondsAsTime(totalSeconds) {
     hours  = Math.floor(totalSeconds / 3600);
     minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
     seconds = Math.floor(totalSeconds - (hours * 3600) -  (minutes * 60));
-    if (minutes < 10) {
+    
+/*    if (minutes < 10) {
         minutes = "0" + minutes;
     }
     if (seconds < 10) {
         seconds  = "0" + seconds;
     }
-    
+*/    
     if (hours === NaN || minutes === NaN || seconds === NaN) {
         return "--:--";
     }
 
     if (hours > 0) {
-        return (hours + ":" + minutes + ':' + seconds);
+        return (hours + " hrs, " + minutes + ' mins, ' + seconds + " secs");
     }
-    return (minutes + ':' + seconds);
+    return (minutes + ' mins, ' + seconds + " secs");
 }
 
 
@@ -99,21 +100,11 @@ function CSServerDisplay() {
                         trElem.append(tdElem);
                         tbodyElem.append(trElem);
                         
-                        trElem = $(document.createElement("tr")).addClass("csPlayerRow csRows");
-                        tdElem = $(document.createElement("td")).addClass("csPlayerCol").append("Player Name");
-                        trElem.append(tdElem);
-                        tdElem = $(document.createElement("td")).addClass("csPlayerCol").append("Player Kills");
-                        trElem.append(tdElem);
-                        tdElem = $(document.createElement("td")).addClass("csPlayerCol").append("Player Play Time");
-                        trElem.append(tdElem);
-                        tableElem2.append(trElem);
-
-                        
                         for (var i=0; i<playerList.length; i+=1) {
                             trElem = $(document.createElement("tr")).addClass("csPlayerRow");
                             tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].name);
                             trElem.append(tdElem);
-                            tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].kills);
+                            tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].kills + " Kills");
                             trElem.append(tdElem);
                             tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(_cs_formatSecondsAsTime(playerList[i].time));
                             trElem.append(tdElem);
