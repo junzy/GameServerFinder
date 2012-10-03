@@ -74,7 +74,7 @@ function CSServerDisplay() {
                     trElem.append(tdElem);
                     tdElem = $(document.createElement("td")).addClass("csServerMapName").append(serverDict.map);
                     trElem.append(tdElem);
-                    tdElem = $(document.createElement("td")).addClass("csServerIP").append(serverDict.gameIP);
+                    tdElem = $(document.createElement("td")).addClass("csServerIP").append(key);
                     trElem.append(tdElem);
                     tdElem = $(document.createElement("td")).addClass("csServerLatency").append(serverDict.latency + " ms");
                     trElem.append(tdElem);
