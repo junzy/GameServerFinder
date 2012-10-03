@@ -17,8 +17,11 @@ function _cs_formatSecondsAsTime(totalSeconds) {
 
     if (hours > 0) {
         return (hours + " hrs, " + minutes + ' mins, ' + seconds + " secs");
+    } else if (minutes > 0) {
+        return (minutes + ' mins, ' + seconds + " secs");
+    } else {
+        return (seconds + " secs");
     }
-    return (minutes + ' mins, ' + seconds + " secs");
 }
 
 
