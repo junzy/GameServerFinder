@@ -121,9 +121,10 @@ class CSServerFinder(DatagramProtocol):
             filePointer.write(json.dumps(self.serverDict))
             filePointer.close()
             
-            for keys in self.serverDict:
-                if (time.time() - self.serverDict[keys]["lastTS"]) > (self.pingDelay + 1):
-                    del self.serverDict[keys]
+            keys = self.serverDict.keys()
+            for key in keys:
+                if (time.time() - self.serverDict[key]["lastTS"]) > (self.pingDelay + 1):
+                    del self.serverDict[key]
             
             self.lastSendTime = time.time()
             counter = 0
