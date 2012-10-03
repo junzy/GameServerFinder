@@ -122,9 +122,8 @@ class CSServerFinder(DatagramProtocol):
             filePointer.close()
             
             for keys in self.serverDict:
-                if time.time() - self.serverDict[keys]["lastTS"] > 20:
-                    del self.serverDict[key]
-            print self.serverDict
+                if (time.time() - self.serverDict[keys]["lastTS"]) > (self.pingDelay + 1):
+                    del self.serverDict[keys]
             
             self.lastSendTime = time.time()
             counter = 0
@@ -136,7 +135,7 @@ class CSServerFinder(DatagramProtocol):
                             self.serverDict[(str(ipAddr) + ":" + str(port))]["lastTS"] = time.time()
                         self._send_A2S_INFO(str(ipAddr), port)
                     if counter == 64:
-                        time.sleep(0)
+                        time.sleep(0.1)
                         counter = 0
                     counter += 1
         except Exception as e:
