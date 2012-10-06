@@ -77,14 +77,14 @@ class CSServerFinder(DatagramProtocol):
         except Exception as e:
             print (e)
             traceback.print_exc()
-            
+
     def loadDefaults(self):
         self.jsonRoot = "../www/JSON/"
         self.ipRanges = [IPNetwork("10.1.33.0/24"), IPNetwork("10.1.34.0/24")]
         self.portList = [27015]
         self.pingDelay = 10.0
         self.moduleEnabled = True
-    
+
     def loadConfig(self, config):
         moduleEnabled = config.get("cs", "moduleEnabled")
         if moduleEnabled == "False" :
@@ -93,18 +93,18 @@ class CSServerFinder(DatagramProtocol):
         else :
             self.jsonRoot = config.get("global", "jsonRoot")
             self.moduleEnabled = True
-            
+
         ipRanges = config.get("cs", "ipRanges")
         if ipRanges :
             ipRanges = json.loads(ipRanges)
             self.ipRanges = []
             for ipRange in ipRanges:
                 self.ipRanges.append(IPNetwork(ipRange))
-            
+
         portList = config.get("cs", "portList")
         if portList :
             self.portList = json.loads(portList)
-            
+
         pingDelay = config.get("cs", "pingDelay")
         if pingDelay :
             self.pingDelay = float(pingDelay)
@@ -120,12 +120,12 @@ class CSServerFinder(DatagramProtocol):
             filePointer = open(self.jsonRoot + "cs.json", 'w')
             filePointer.write(json.dumps(self.serverDict))
             filePointer.close()
-            
+
             keys = self.serverDict.keys()
             for key in keys:
                 if (time.time() - self.serverDict[key]["lastTS"]) > (self.pingDelay + 1):
                     del self.serverDict[key]
-            
+
             self.lastSendTime = time.time()
             counter = 0
             for ipRange in self.ipRanges:
@@ -151,27 +151,27 @@ class CSServerFinder(DatagramProtocol):
             if firstLong == -1 and (firstByte == ord('m') or firstByte == ord('I')):
                 self._recv_A2S_INFO(serverResponse, serverInfo)
                 return
-            
+
             if firstByte == S2C_CHALLENGE:
                 self._recv_A2S_CHALLENGE(serverResponse, serverInfo)
                 return
-            
+
             if firstByte == A2S_PLAYER_REPLY:
                 self._recv_A2S_PLAYER(serverResponse, serverInfo)
                 return
-            
+
             print ' '.join(('%#04x' % ord(c) for c in serverResponse))
         except Exception as e:
             print(e)
             traceback.print_exc()
-    
+
     def _send_A2S_INFO(self, host, port):
         packet = SourceQueryPacket()
         packet.putLong(WHOLE)
         packet.putByte(A2S_INFO)
         packet.putString(A2S_INFO_STRING)
         self.transport.write(packet.getvalue(), (host, port))
-    
+
     def _recv_A2S_INFO(self, packet, (host, port)):
         if (str(host) + ":" + str(port)) in self.serverDict:
             self.serverDict[(str(host) + ":" + str(port))]["latency"] = int((time.time() - self.serverDict[(str(host) + ":" + str(port))]["lastTS"])*1000)
@@ -199,7 +199,7 @@ class CSServerFinder(DatagramProtocol):
             self.serverDict[(str(host) + ":" + str(port))]['passworded'] = packet.getByte()
             self.serverDict[(str(host) + ":" + str(port))]['secure'] = chr(packet.getByte())
             self.serverDict[(str(host) + ":" + str(port))]['gameVersion'] = packet.getString()
-            
+
             try:
                 edf = packet.getByte()
                 self.serverDict[(str(host) + ":" + str(port))]['edf'] = edf
@@ -231,7 +231,7 @@ class CSServerFinder(DatagramProtocol):
             self.serverDict[(str(host) + ":" + str(port))]['isMod'] = packet.getByte()
             self.serverDict[(str(host) + ":" + str(port))]['secure'] = chr(packet.getByte())
             self.serverDict[(str(host) + ":" + str(port))]['numBots'] = packet.getByte()
-            
+
             if self.serverDict[(str(host) + ":" + str(port))]['isMod'] == 1:
                 self.serverDict[(str(host) + ":" + str(port))]['URLInfo'] = packet.getString()
                 self.serverDict[(str(host) + ":" + str(port))]['URLDL'] = packet.getString()
@@ -240,14 +240,14 @@ class CSServerFinder(DatagramProtocol):
                 self.serverDict[(str(host) + ":" + str(port))]['modSize'] = packet.getLong()
                 self.serverDict[(str(host) + ":" + str(port))]['svOnly'] = packet.getByte()
                 self.serverDict[(str(host) + ":" + str(port))]['CIDLL'] = packet.getByte()
-            
+
         self._send_A2S_PLAYER(host, port)
-            
+
     def _send_A2S_PLAYER(self, host, port):
         if self.serverDict[(str(host) + ":" + str(port))]['challenge'] == None:
             self._send_A2S_CHALLENGE(host, port)
             return
-        
+
         packet = SourceQueryPacket()
         packet.putLong(WHOLE)
         packet.putByte(A2S_PLAYER)
@@ -259,9 +259,9 @@ class CSServerFinder(DatagramProtocol):
         discard = packet.getLong()
         discard = packet.getByte()
         numPlayers = packet.getByte()
-        
+
         self.serverDict[(str(host) + ":" + str(port))]['players'] = []
-        
+
         try:
             for i in xrange(numPlayers):
                 player = {}
@@ -279,7 +279,7 @@ class CSServerFinder(DatagramProtocol):
         packet.putByte(A2S_PLAYER)
         packet.putLong(CHALLENGE)
         self.transport.write(packet.getvalue(), (host, port))
-        
+
     def _recv_A2S_CHALLENGE(self, packet, (host, port)):
         packet = SourceQueryPacket(packet)
         discard = packet.getLong()
@@ -293,7 +293,7 @@ def startConfig(config):
     moduleConfig["moduleTitle"] = "CS"
     moduleConfig["defaultEnabled"] = "true"
     moduleConfig["refreshTime"] = "10"
-    
+
     config.add_section("cs")
     while True:
         value = raw_input("Would you like the scanner for Counter Strike to be activated? (Y/N) :")
@@ -305,7 +305,7 @@ def startConfig(config):
             return moduleConfig
         else :
             print "Please enter either Y or N"
-    
+
     print "Please enter the IP ranges to be scanned. In the form subnet/mask, eg. 10.1.1.0/24. Blank input to stop :"
     ipRanges = []
     while True:
@@ -318,7 +318,7 @@ def startConfig(config):
             ipRanges.append(value)
         except:
             print value, "is not a valid IP range"
-            
+
     print "Please enter the ports to scan on each host. Press enter to use default. Enter 0 to stop : "
     portList = []
     while True:
@@ -339,7 +339,7 @@ def startConfig(config):
                     print "Please enter a value between 0 and 65535"
             except:
                 print value, "is not a valid number"
-    
+
     print "Please enter the delay for checking the server. Between 1 and 3600 Seconds :"
     while True:
         value = raw_input("Enter delay : ")
