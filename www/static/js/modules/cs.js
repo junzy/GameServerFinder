@@ -3,14 +3,14 @@ function _cs_formatSecondsAsTime(totalSeconds) {
     hours  = Math.floor(totalSeconds / 3600);
     minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
     seconds = Math.floor(totalSeconds - (hours * 3600) -  (minutes * 60));
-    
+
 /*    if (minutes < 10) {
         minutes = "0" + minutes;
     }
     if (seconds < 10) {
         seconds  = "0" + seconds;
     }
-*/    
+*/
     if (hours === NaN || minutes === NaN || seconds === NaN) {
         return "--:--";
     }
@@ -31,7 +31,7 @@ function CSServerDisplay() {
     _this.playSound = false;
     _this.serverList = {};
     _this.audioElement = $(document.createElement("audio")).attr("src", "static/ding.wav").attr("preload", "true");
-    
+
     _this.fillTable = function () {
         $.ajax({
           url: "JSON/cs.json",
@@ -39,12 +39,12 @@ function CSServerDisplay() {
           cache: false,
           success: function(jsonObj){
             var tableElem, trElem, tdElem,tableElem2, tbodyElem, count, divElem, newServ = false, serverList = {};
-            
+
             tableElem = $("#CSContentTable");
             tableElem.empty();
-            
+
             tbodyElem = $(document.createElement("tbody"));
-            
+
             trElem = $(document.createElement("tr")).addClass("csTopRow");
             tdElem = $(document.createElement("td")).addClass("csServerName").append("Server Name");
             trElem.append(tdElem);
@@ -58,65 +58,67 @@ function CSServerDisplay() {
             trElem.append(tdElem);
             tdElem = $(document.createElement("td")).addClass("csServerPassword").append("Password");
             trElem.append(tdElem);
-            tdElem = $(document.createElement("td")).addClass("csServerVersion").append("Version");            
+            tdElem = $(document.createElement("td")).addClass("csServerVersion").append("Version");
             trElem.append(tdElem);
             tbodyElem.append(trElem);
-            
+
             count = 0;
-            for (key in jsonObj) {
-                if (jsonObj.hasOwnProperty(key)) {
-                    if(!(key in _this.serverList)) {
-                        newServ = true;
-                    }
-                    serverList[key] = true;
-                    serverDict = jsonObj[key];
-                    trElem = $(document.createElement("tr")).addClass("csRows");
-                    tdElem = $(document.createElement("td")).addClass("csServerName").append(serverDict.serverName);
-                    trElem.append(tdElem);
-                    tdElem = $(document.createElement("td")).addClass("csServerMapName").append(serverDict.map);
-                    trElem.append(tdElem);
-                    tdElem = $(document.createElement("td")).addClass("csServerIP").append(key);
-                    trElem.append(tdElem);
-                    tdElem = $(document.createElement("td")).addClass("csServerLatency").append(serverDict.latency + " ms");
-                    trElem.append(tdElem);
-                    tdElem = $(document.createElement("td")).addClass("csServerPlayer").append(serverDict.numPlayers + "/" + serverDict.maxPlayers);
-                    trElem.append(tdElem);
-                    if (serverDict.passworded === 1) {
-                        tdElem = $(document.createElement("td")).addClass("csServerPassword").append("Yes");
-                    } else {
-                        tdElem = $(document.createElement("td")).addClass("csServerPassword").append("No");                    
-                    }
-                    trElem.append(tdElem);
-                    tdElem = $(document.createElement("td")).addClass("csServerVersion").append(serverDict.version);
-                    trElem.append(tdElem);
-                    tbodyElem.append(trElem);
-                    
-                    playerList = serverDict.players;
-                    if (playerList.length > 0) {
-                        playerList.sort(function(a,b) { return parseFloat(b.kills) - parseFloat(a.kills) } );
-                    
-                        trElem = $(document.createElement("tr")).addClass("csPlayersRow");
-                        tdElem = $(document.createElement("td")).addClass("csPlayersCol").attr("colspan", "7");
-                        tableElem2 = $(document.createElement("table")).addClass("csPlayersTable");
-                        divElem = $(document.createElement("div")).addClass("csPlayersDiv");
-                        divElem.append(tableElem2)
-                        tdElem.append(divElem);
+            if (jsonObj !== "undefined"){
+                for (key in jsonObj) {
+                    if (jsonObj.hasOwnProperty(key)) {
+                        if(!(key in _this.serverList)) {
+                            newServ = true;
+                        }
+                        serverList[key] = true;
+                        serverDict = jsonObj[key];
+                        trElem = $(document.createElement("tr")).addClass("csRows");
+                        tdElem = $(document.createElement("td")).addClass("csServerName").append(serverDict.serverName);
+                        trElem.append(tdElem);
+                        tdElem = $(document.createElement("td")).addClass("csServerMapName").append(serverDict.map);
+                        trElem.append(tdElem);
+                        tdElem = $(document.createElement("td")).addClass("csServerIP").append(key);
+                        trElem.append(tdElem);
+                        tdElem = $(document.createElement("td")).addClass("csServerLatency").append(serverDict.latency + " ms");
+                        trElem.append(tdElem);
+                        tdElem = $(document.createElement("td")).addClass("csServerPlayer").append(serverDict.numPlayers + "/" + serverDict.maxPlayers);
+                        trElem.append(tdElem);
+                        if (serverDict.passworded === 1) {
+                            tdElem = $(document.createElement("td")).addClass("csServerPassword").append("Yes");
+                        } else {
+                            tdElem = $(document.createElement("td")).addClass("csServerPassword").append("No");
+                        }
+                        trElem.append(tdElem);
+                        tdElem = $(document.createElement("td")).addClass("csServerVersion").append(serverDict.version);
                         trElem.append(tdElem);
                         tbodyElem.append(trElem);
-                        
-                        for (var i=0; i<playerList.length; i+=1) {
-                            trElem = $(document.createElement("tr")).addClass("csPlayerRow");
-                            tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].name);
+
+                        playerList = serverDict.players;
+                        if (playerList.length > 0) {
+                            playerList.sort(function(a,b) { return parseFloat(b.kills) - parseFloat(a.kills) } );
+
+                            trElem = $(document.createElement("tr")).addClass("csPlayersRow");
+                            tdElem = $(document.createElement("td")).addClass("csPlayersCol").attr("colspan", "7");
+                            tableElem2 = $(document.createElement("table")).addClass("csPlayersTable");
+                            divElem = $(document.createElement("div")).addClass("csPlayersDiv");
+                            divElem.append(tableElem2)
+                            tdElem.append(divElem);
                             trElem.append(tdElem);
-                            tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].kills + " Kills");
-                            trElem.append(tdElem);
-                            tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(_cs_formatSecondsAsTime(playerList[i].time));
-                            trElem.append(tdElem);
-                            tableElem2.append(trElem);
+                            tbodyElem.append(trElem);
+
+                            for (var i=0; i<playerList.length; i+=1) {
+                                trElem = $(document.createElement("tr")).addClass("csPlayerRow");
+                                tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].name);
+                                trElem.append(tdElem);
+                                tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(playerList[i].kills + " Kills");
+                                trElem.append(tdElem);
+                                tdElem = $(document.createElement("td")).addClass("csPlayerCol").append(_cs_formatSecondsAsTime(playerList[i].time));
+                                trElem.append(tdElem);
+                                tableElem2.append(trElem);
+                            }
+
                         }
-                        
+                        count += 1;
                     }
-                    count += 1;
                 }
             }
             
@@ -124,7 +126,7 @@ function CSServerDisplay() {
                 _this.audioElement[0].play();
             }
             _this.serverList = serverList;
-            
+
             if (count === 0) {
                 trElem = $(document.createElement("tr")).addClass("csRows noServerRow");
                 tdElem = $(document.createElement("td")).attr("colspan", "7").append("No Server Running");
@@ -134,13 +136,13 @@ function CSServerDisplay() {
             tableElem.append(tbodyElem);
         }
     })};
-    
+
     _this.refreshTable = function () {
         if (modules.cs.enabled === false) return;
         _this.fillTable();
         setTimeout(function() {_this.refreshTable();}, parseInt(modules.cs.refreshTime, 10) * 1000);
     };
-    
+
     _this.createDiv = function () {
         var div = $(document.createElement("div")).attr("id","CSContent");
         div.append($(document.createElement("h2")).append("Counter - Strike").addClass("gameTitle csTitle").append($(document.createElement("label")).append($(document.createElement("input")).attr("type", "checkbox").attr("id","csPingCheckBox")).append("Ping for new server")));
@@ -151,15 +153,15 @@ function CSServerDisplay() {
         $("#mainContent").append(div);
         $("#csPingCheckBox").click(_this.toggleSound);
     };
-    
+
     _this.toggleSound = function () {
         _this.playSound = $("#csPingCheckBox")[0].checked;
     };
-    
+
     _this.removeDiv = function () {
         $("#CSContent").remove();
     };
-    
+
     _this.moduleToggle = function () {
         $("#" + modules.cs.moduleName).toggleClass("gameSelected");
         if($("#" + modules.cs.moduleName).hasClass("gameSelected")) {
@@ -171,9 +173,9 @@ function CSServerDisplay() {
             _this.removeDiv();
         }
     };
-    
+
     $("#" + modules.cs.moduleName).click(_this.moduleToggle);
-    
+
     if (modules.cs.defaultEnabled) {
         $("#" + modules.cs.moduleName).addClass("gameSelected");
         modules.cs.enabled = true;
