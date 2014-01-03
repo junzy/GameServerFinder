@@ -20,43 +20,39 @@ module_title = 'Source'
 
 
 class Source(DatagramProtocol):
-    PACKET_SIZE = 1400
-
-    WHOLE = -1
-    SPLIT = -2
-
-    # A2S_INFO
-    A2S_INFO = ord('T')
-    A2S_INFO_STRING = 'Source Engine Query'
-    A2S_INFO_REPLY = ord('I')
-
-    # A2S_PLAYER
-    A2S_PLAYER = ord('U')
-    A2S_PLAYER_REPLY = ord('D')
-
-    # A2S_RULES
-    A2S_RULES = ord('V')
-    A2S_RULES_REPLY = ord('E')
-
-    # S2C_CHALLENGE
-    CHALLENGE = -1
-    S2C_CHALLENGE = ord('A')
-
     def __init__(self):
-        try:
-            self.server_dict = {}
-            self.last_send_time = 0
-            self.logger = logging.getLogger('Source')
+        # packet info
+        self.packet_size = 1400
+        self.whole_packet = -1
+        self.split_packet = -2
 
-            # Define the defaults
-            self.json_root = "../www/JSON/"
-            self.ip_ranges = [IPNetwork("10.1.33.0/24"), IPNetwork("10.1.34.0/24")]
-            self.port_list = [27015]
-            self.ping_delay = 10.0
-            self.module_enabled = True
-        except Exception as e:
-            if self.logger.isEnabledFor(logging.ERROR):
-                self.logger.error(e)
+        # a2s_info
+        self.a2s_info = ord('T')
+        self.a2s_info_string = 'Source Engine Query'
+        self.a2s_info_reply = ord('I')
+
+        # a2s_player
+        self.a2s_player = ord('U')
+        self.a2s_player_reply = ord('D')
+
+        # a2s_rules
+        self.a2s_rules = ord('V')
+        self.a2s_rules_reply = ord('E')
+
+        # s2c_challenge
+        self.challenge = -1
+        self.s2c_challenge = ord('A')
+
+        self.server_dict = {}
+        self.last_send_time = 0
+        self.logger = logging.getLogger(module_name)
+
+        # Define the defaults
+        self.json_root = "../www/JSON/"
+        self.ip_ranges = [IPNetwork("10.1.33.0/24"), IPNetwork("10.1.34.0/24")]
+        self.port_list = [27015]
+        self.ping_delay = 10.0
+        self.module_enabled = True
 
     def load_config(self, config):
         module_enabled = config.get("cs", "module_enabled")
@@ -138,11 +134,11 @@ class Source(DatagramProtocol):
                 self.recv_a2s_info(server_response, server_info)
                 return
 
-            if first_byte == self.S2C_CHALLENGE:
+            if first_byte == self.s2c_challenge:
                 self.recv_a2s_challenge(server_response, server_info)
                 return
 
-            if first_byte == self.A2S_PLAYER_REPLY:
+            if first_byte == self.a2s_player_reply:
                 self.recv_a2s_player(server_response, server_info)
                 return
 
@@ -153,9 +149,9 @@ class Source(DatagramProtocol):
 
     def send_a2s_info(self, host, port):
         packet = Packet()
-        packet.put_long(self.WHOLE)
-        packet.put_byte(self.A2S_INFO)
-        packet.put_string(self.A2S_INFO_STRING)
+        packet.put_long(self.whole_packet)
+        packet.put_byte(self.a2s_info)
+        packet.put_string(self.a2s_info_string)
         self.transport.write(packet.getvalue(), (host, port))
 
     def recv_a2s_info(self, packet, (host, port)):
@@ -237,8 +233,8 @@ class Source(DatagramProtocol):
             return
 
         packet = Packet()
-        packet.put_long(self.WHOLE)
-        packet.put_byte(self.A2S_PLAYER)
+        packet.put_long(self.whole_packet)
+        packet.put_byte(self.a2s_player)
         packet.put_long(self.server_dict[(str(host) + ":" + str(port))]['challenge'])
         self.transport.write(packet.getvalue(), (host, port))
 
@@ -263,9 +259,9 @@ class Source(DatagramProtocol):
 
     def send_a2s_challenge(self, host, port):
         packet = Packet()
-        packet.put_long(self.WHOLE)
-        packet.put_byte(self.A2S_PLAYER)
-        packet.put_long(self.CHALLENGE)
+        packet.put_long(self.whole_packet)
+        packet.put_byte(self.a2s_player)
+        packet.put_long(self.challenge)
         self.transport.write(packet.getvalue(), (host, port))
 
     def recv_a2s_challenge(self, packet, (host, port)):
@@ -354,12 +350,13 @@ def start_config(config):
 
 
 def start_module(config):
-    logger = logging.getLogger('Source')
+    logger = logging.getLogger(module_name)
     if logger.isEnabledFor(logging.INFO):
         logger.info("Starting Source Module")
     crawler = Source()
     crawler.load_config(config)
     crawler.start_crawler()
+
 
 if __name__ == "__main__":
     start_module(None)
