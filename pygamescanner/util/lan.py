@@ -18,5 +18,6 @@ def get_all_broadcast_address():
             broadcast_address = netaddr.IPNetwork('%s/%s' % (network_address.network, netmask))
             if not str(broadcast_address).startswith('127'):
                 broadcast_address_list.append(str(broadcast_address))
+    return broadcast_address_list
 
 __all__ = ['get_all_broadcast_address']

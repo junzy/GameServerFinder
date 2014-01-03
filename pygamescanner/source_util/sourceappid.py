@@ -1,7 +1,7 @@
 # coding=utf-8
 
 
-class SourceAppId:
+class SourceAppId(object):
     source_app_id = {
         0: "Base Goldsource Shared Binaries",
         1: "Base Goldsource Shared Content",

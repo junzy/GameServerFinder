@@ -7,7 +7,6 @@ import json
 import logging
 import os
 import socket
-import bz2
 
 from netaddr import IPNetwork
 from netaddr.core import AddrFormatError
@@ -97,7 +96,7 @@ class Source(DatagramProtocol):
             keys = self.server_dict.keys()
             current_time = time.time()
             for key in keys:
-                if (current_time - self.server_dict[key]["lastTS"]) > (self.pingDelay + 1):
+                if (current_time - self.server_dict[key]["lastTS"]) > (self.ping_delay + 1):
                     del self.server_dict[key]
 
             keys = self.server_dict.keys()
@@ -133,15 +132,6 @@ class Source(DatagramProtocol):
             packet = Packet(server_response)
 
             first_long = packet.get_long()
-
-            if first_long == -2:
-                packet_id = packet.get_long()
-                packet_number = packet.get_byte()
-                total_packets = packet_number & 0b11110000
-                current_packet = packet_number & 0b00001111
-
-                pass
-
             first_byte = packet.get_byte()
 
             if first_long == -1 and (first_byte == ord('m') or first_byte == ord('I')):
@@ -261,7 +251,7 @@ class Source(DatagramProtocol):
         self.server_dict[(str(host) + ":" + str(port))]['players'] = []
 
         try:
-            for i in xrange(num_players):
+            for _ in xrange(num_players):
                 player = dict()
                 player['index'] = packet.get_byte()
                 player['name'] = packet.get_string()
