@@ -11,8 +11,6 @@ from twisted.internet import reactor
 
 __all__ = ['restart_server', 'start_server', 'stop_server', 'start_config']
 
-logger = logging.getLogger('main')
-
 
 def restart_server(config_file_name, log_file_name):
     stop_server()
@@ -20,6 +18,7 @@ def restart_server(config_file_name, log_file_name):
 
 
 def stop_server():
+    logger = logging.getLogger('main')
     if logger.isEnabledFor(logging.INFO):
         logger.info("Stopping Server")
     reactor.stop()
@@ -35,6 +34,7 @@ def start_server(config_file_name, log_file_name):
     handler.setFormatter(formatter)
     root_logger.addHandler(handler)
 
+    logger = logging.getLogger('main')
     if logger.isEnabledFor(logging.INFO):
         logger.info("Starting Server")
 
@@ -60,7 +60,7 @@ def start_config(config_file_name):
 
     value = raw_input("Enter the JSON root folder to write the json files too : ")
     if len(value) == 0:
-        value = '../www/JSON'
+        value = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/www/JSON'
     elif value[-1] != "/":
         value += "/"
     config.set("global", "json_root", value)

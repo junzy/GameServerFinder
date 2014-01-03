@@ -1,13 +1,10 @@
 #! /usr/bin/env python
 # coding=utf-8
 
-from setuptools import setup
+import setuptools
 import io
-import os
 
 import pygamescanner
-
-here = os.path.abspath(os.path.dirname(__file__))
 
 
 def read(*file_names, **kwargs):
@@ -15,14 +12,14 @@ def read(*file_names, **kwargs):
     sep = kwargs.get('sep', '\n')
     buf = []
     for filename in file_names:
-        with io.open(filename, encoding=encoding) as f:
-            buf.append(f.read())
+        with io.open(filename, encoding=encoding) as file_obj:
+            buf.append(file_obj.read())
     return sep.join(buf)
 
 
-long_description = read('README.rst', 'CHANGELOG.rst')
+LONG_DESCRIPTION = read('README.rst', 'CHANGELOG.rst')
 
-setup(
+setuptools.setup(
     name=pygamescanner.__package_name__,
     version=pygamescanner.__version__,
     url=pygamescanner.__url__,
@@ -38,7 +35,7 @@ setup(
     cmdclass={},
     author_email=pygamescanner.__email__,
     description=pygamescanner.__description__,
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     packages=[pygamescanner.__package_name__],
     include_package_data=True,
     platforms='any',

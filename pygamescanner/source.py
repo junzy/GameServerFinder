@@ -15,8 +15,8 @@ from twisted.internet import reactor
 from pygamescanner.util.packet import Packet
 from pygamescanner.util.lan import get_all_broadcast_address
 
-module_name = 'source'
-module_title = 'Source'
+MODULE_NAME = 'source'
+MODULE_TITLE = 'Source'
 
 
 class Source(DatagramProtocol):
@@ -45,7 +45,7 @@ class Source(DatagramProtocol):
 
         self.server_dict = {}
         self.last_send_time = 0
-        self.logger = logging.getLogger(module_name)
+        self.logger = logging.getLogger(MODULE_NAME)
 
         # Define the defaults
         self.json_root = "../www/JSON/"
@@ -112,11 +112,9 @@ class Source(DatagramProtocol):
                         time.sleep(0.1)
                         counter = 0
                     counter += 1
-        except socket.error as e:
-            pass
-        except Exception as e:
-            if self.logger.isEnabledFor(logging.ERROR):
-                self.logger.error(e)
+        except socket.error as exception:
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.logger.debug(exception)
         finally:
             reactor.callLater(self.ping_delay, self.server_pinger)
 
@@ -141,11 +139,9 @@ class Source(DatagramProtocol):
             if first_byte == self.a2s_player_reply_byte:
                 self.recv_a2s_player(server_response, server_info)
                 return
-
-            print ' '.join(('%#04x' % ord(c) for c in server_response))
-        except Exception as e:
-            if self.logger.isEnabledFor(logging.ERROR):
-                self.logger.error(e)
+        except struct.error:
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.logger.debug("malformed packet received: \n" + server_response)
 
     def send_a2s_info(self, host, port):
         packet = Packet()
@@ -154,7 +150,7 @@ class Source(DatagramProtocol):
         packet.put_string(self.a2s_info_query_str)
         self.transport.write(packet.getvalue(), (host, port))
 
-    def recv_a2s_info(self, packet, (host, port)):
+    def recv_a2s_info(self, server_response, (host, port)):
         if (str(host) + ":" + str(port)) in self.server_dict and \
                 self.server_dict[(str(host) + ":" + str(port))]["latency"] == "CHECKING":
             self.server_dict[(str(host) + ":" + str(port))]["latency"] = \
@@ -165,7 +161,7 @@ class Source(DatagramProtocol):
             self.server_dict[(str(host) + ":" + str(port))]["lastTS"] = time.time()
             self.server_dict[(str(host) + ":" + str(port))]["challenge"] = None
 
-        packet = Packet(packet)
+        packet = Packet(server_response)
         packet.get_long()
         self.server_dict[(str(host) + ":" + str(port))]['type'] = chr(packet.get_byte())
         if self.server_dict[(str(host) + ":" + str(port))]['type'] == "I":
@@ -198,7 +194,8 @@ class Source(DatagramProtocol):
                 if edf & 0x20:
                     self.server_dict[(str(host) + ":" + str(port))]['gameID'] = packet.get_string()
             except struct.error:
-                pass
+                if self.logger.isEnabledFor(logging.DEBUG):
+                    self.logger.debug("malformed packet received: \n" + server_response)
 
         else:
             self.server_dict[(str(host) + ":" + str(port))]['gameIP'] = packet.get_string()
@@ -238,8 +235,8 @@ class Source(DatagramProtocol):
         packet.put_long(self.server_dict[(str(host) + ":" + str(port))]['challenge'])
         self.transport.write(packet.getvalue(), (host, port))
 
-    def recv_a2s_player(self, packet, (host, port)):
-        packet = Packet(packet)
+    def recv_a2s_player(self, server_response, (host, port)):
+        packet = Packet(server_response)
         packet.get_long()
         packet.get_byte()
         num_players = packet.get_byte()
@@ -255,7 +252,8 @@ class Source(DatagramProtocol):
                 player['time'] = packet.get_float()
                 self.server_dict[(str(host) + ":" + str(port))]['players'].append(player)
         except struct.error:
-            pass
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.logger.debug("malformed packet received: \n" + server_response)
 
     def send_a2s_challenge(self, host, port):
         packet = Packet()
@@ -264,8 +262,8 @@ class Source(DatagramProtocol):
         packet.put_long(self.a2s_challenge_query_byte)
         self.transport.write(packet.getvalue(), (host, port))
 
-    def recv_a2s_challenge(self, packet, (host, port)):
-        packet = Packet(packet)
+    def recv_a2s_challenge(self, server_response, (host, port)):
+        packet = Packet(server_response)
         packet.get_long()
         packet.get_byte()
         self.server_dict[(str(host) + ":" + str(port))]['challenge'] = packet.get_long()
@@ -274,17 +272,17 @@ class Source(DatagramProtocol):
 
 def start_config(config):
     module_config = dict()
-    module_config["module_name"] = module_name
-    module_config["module_title"] = module_title
+    module_config["MODULE_NAME"] = MODULE_NAME
+    module_config["MODULE_TITLE"] = MODULE_TITLE
 
-    config.add_section(module_config["module_name"])
+    config.add_section(module_config["MODULE_NAME"])
     while True:
         value = raw_input("Would you like the scanner for Source to be activated? (Y/N) :")
         if value.lower() in ['y', 'yes']:
-            config.set(module_config["module_name"], "module_enabled", "true")
+            config.set(module_config["MODULE_NAME"], "module_enabled", "true")
             break
         elif value.lower() in ['n', 'no']:
-            config.set(module_config["module_name"], "module_enabled", "false")
+            config.set(module_config["MODULE_NAME"], "module_enabled", "false")
             return module_config
         else:
             print "Please enter either y(es) or n(o)"
@@ -300,7 +298,7 @@ def start_config(config):
         if value == "":
             if len(ip_ranges) < 1:
                 ip_ranges = get_all_broadcast_address()
-            config.set(module_config["module_name"], "ip_ranges", json.dumps(ip_ranges))
+            config.set(module_config["MODULE_NAME"], "ip_ranges", json.dumps(ip_ranges))
             break
         else:
             try:
@@ -319,10 +317,10 @@ def start_config(config):
         if value == "":
             if 27015 not in port_list:
                 port_list.append(27015)
-            config.set(module_config["module_name"], "port_list", json.dumps(port_list))
+            config.set(module_config["MODULE_NAME"], "port_list", json.dumps(port_list))
             break
         elif value == "0":
-            config.set(module_config["module_name"], "port_list", json.dumps(port_list))
+            config.set(module_config["MODULE_NAME"], "port_list", json.dumps(port_list))
             break
         else:
             try:
@@ -340,7 +338,7 @@ def start_config(config):
         try:
             test = int(value)
             if 1 <= test <= 3600:
-                config.set(module_config["module_name"], "ping_delay", value)
+                config.set(module_config["MODULE_NAME"], "ping_delay", value)
                 break
             else:
                 print "Please enter a number between 1 and 3600"
@@ -350,7 +348,7 @@ def start_config(config):
 
 
 def start_module(config):
-    logger = logging.getLogger(module_name)
+    logger = logging.getLogger(MODULE_NAME)
     if logger.isEnabledFor(logging.INFO):
         logger.info("Starting Source Module")
     crawler = Source()

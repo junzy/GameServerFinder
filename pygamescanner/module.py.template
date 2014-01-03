@@ -15,7 +15,7 @@ class ModuleName(DatagramProtocol):
     __all__ = ["load_config", "start_crawler"]
 
     def __init__(self):
-        self.module_name = "module_name"
+        self.module_name = "MODULE_NAME"
         self.json_root = "../www/JSON/"
         self.ping_delay = 10.0
         self.module_enabled = True
@@ -60,19 +60,19 @@ class ModuleName(DatagramProtocol):
 
 def start_config(config):
     module_config = dict()
-    module_config["module_name"] = "module_name"
-    module_config["module_title"] = "module_title"
+    module_config["MODULE_NAME"] = "MODULE_NAME"
+    module_config["MODULE_TITLE"] = "MODULE_TITLE"
     module_config["default_enabled"] = "true"
     module_config["ping_delay"] = "10"
     
-    config.add_section(module_config["module_name"])
+    config.add_section(module_config["MODULE_NAME"])
     while True:
-        value = raw_input("Would you like the scanner for " + module_config["module_name"] + " to be activated? (Y/N) :")
+        value = raw_input("Would you like the scanner for " + module_config["MODULE_NAME"] + " to be activated? (Y/N) :")
         if value.lower() in ['y', 'yes']:
-            config.set(module_config["module_name"], "module_enabled", "true")
+            config.set(module_config["MODULE_NAME"], "module_enabled", "true")
             break
         elif value.lower() in ['n', 'no']:
-            config.set(module_config["module_name"], "module_enabled", "false")
+            config.set(module_config["MODULE_NAME"], "module_enabled", "false")
             return module_config
         else:
             print "Please enter either Y(es) or N(o)"
@@ -83,7 +83,7 @@ def start_config(config):
         try:
             test = int(value)
             if 1 <= test <= 3600:
-                config.set(module_config["module_name"], "ping_delay", value)
+                config.set(module_config["MODULE_NAME"], "ping_delay", value)
                 module_config["ping_delay"] = value
                 break
             else:

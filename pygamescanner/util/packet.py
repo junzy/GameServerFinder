@@ -3,8 +3,6 @@
 import StringIO
 import struct
 
-__all__ = ["Packet"]
-
 
 class Packet(StringIO.StringIO):
     def put_byte(self, val):
@@ -47,3 +45,5 @@ class Packet(StringIO.StringIO):
         val = val[start:end]
         self.seek(end + 1)
         return val
+
+__all__ = ["Packet"]
