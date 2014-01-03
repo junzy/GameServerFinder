@@ -1,0 +1,103 @@
+#! /usr/bin/env python
+# coding=utf-8
+
+
+import json
+import logging
+from twisted.internet.protocol import DatagramProtocol
+from twisted.internet import reactor
+
+__all__ = ["ModuleName", "start_module", "start_config"]
+
+
+class ModuleName(DatagramProtocol):
+
+    __all__ = ["load_config", "start_crawler"]
+
+    def __init__(self):
+        self.module_name = "module_name"
+        self.json_root = "../www/JSON/"
+        self.ping_delay = 10.0
+        self.module_enabled = True
+        self.pinger_task = None
+        self.server_dict = {}
+
+    def load_config(self, config):
+        module_enabled = config.get(self.module_name, "module_enabled")
+        if module_enabled == "False":
+            self.module_enabled = False
+            return
+        else:
+            self.json_root = config.get("global", "json_root")
+            self.module_enabled = True
+        
+        ping_delay = config.get(self.module_name, "ping_delay")
+        if ping_delay:
+            self.ping_delay = float(ping_delay)
+
+    def start_crawler(self):
+        if self.module_enabled:
+            reactor.listenUDP(0, self)
+            self.serverPinger()
+
+    def server_pinger(self):
+        try:
+            file_pointer = open(self.json_root + self.module_name + ".json", 'w')
+            file_pointer.write(json.dumps(self.server_dict))
+            file_pointer.close()
+            
+            # Send request data to server here
+        except Exception as e:
+            if self.logger.isEnabledFor(logging.ERROR):
+                self.logger.error(e)
+        finally:
+            reactor.callLater(self.pingDelay, self.serverPinger)
+
+    def datagramReceived(self, server_response, server_info):
+        # process received packet
+        pass
+
+
+def start_config(config):
+    module_config = dict()
+    module_config["module_name"] = "module_name"
+    module_config["module_title"] = "module_title"
+    module_config["default_enabled"] = "true"
+    module_config["ping_delay"] = "10"
+    
+    config.add_section(module_config["module_name"])
+    while True:
+        value = raw_input("Would you like the scanner for " + module_config["module_name"] + " to be activated? (Y/N) :")
+        if value.lower() in ['y', 'yes']:
+            config.set(module_config["module_name"], "module_enabled", "true")
+            break
+        elif value.lower() in ['n', 'no']:
+            config.set(module_config["module_name"], "module_enabled", "false")
+            return module_config
+        else:
+            print "Please enter either Y(es) or N(o)"
+                
+    print "Please enter the delay for checking the server. Between 1 and 3600 Seconds :"
+    while True:
+        value = raw_input("Enter delay : ")
+        try:
+            test = int(value)
+            if 1 <= test <= 3600:
+                config.set(module_config["module_name"], "ping_delay", value)
+                module_config["ping_delay"] = value
+                break
+            else:
+                print "Please enter a number between 1 and 3600"
+        except ValueError:
+            print value, "is not a valid number"
+    return module_config
+
+
+def start_module(config):
+    crawler = ModuleName()
+    crawler.load_config(config)
+    crawler.start_crawler()
+
+if __name__ == "__main__":
+    start_module(None)
+    reactor.run()

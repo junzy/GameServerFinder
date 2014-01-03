@@ -1,7 +1,3 @@
-#Generated Config and Log Files
-log.txt
-*.cfg
-
 # Numerous always-ignore extensions
 *.diff
 *.err
@@ -14,6 +10,7 @@ log.txt
 *~
 *.sass-cache
 *.pyc
+*.cfg
 
 # OS or Editor folders
 .DS_Store
