@@ -27,21 +27,21 @@ class Source(DatagramProtocol):
         self.split_packet = -2
 
         # a2s_info
-        self.a2s_info = ord('T')
-        self.a2s_info_string = 'Source Engine Query'
-        self.a2s_info_reply = ord('I')
+        self.a2s_info_query_byte = ord('T')
+        self.a2s_info_query_str = 'Source Engine Query'
+        self.a2s_info_reply_byte = ord('I')
 
         # a2s_player
-        self.a2s_player = ord('U')
-        self.a2s_player_reply = ord('D')
+        self.a2s_player_query_byte = ord('U')
+        self.a2s_player_reply_byte = ord('D')
 
         # a2s_rules
-        self.a2s_rules = ord('V')
-        self.a2s_rules_reply = ord('E')
+        self.a2s_rules_query_byte = ord('V')
+        self.a2s_rules_reply_byte = ord('E')
 
-        # s2c_challenge
-        self.challenge = -1
-        self.s2c_challenge = ord('A')
+        # a2s_challenge
+        self.a2s_challenge_query_byte = -1
+        self.a2s_challenge_reply_byte = ord('A')
 
         self.server_dict = {}
         self.last_send_time = 0
@@ -134,11 +134,11 @@ class Source(DatagramProtocol):
                 self.recv_a2s_info(server_response, server_info)
                 return
 
-            if first_byte == self.s2c_challenge:
+            if first_byte == self.a2s_challenge_reply_byte:
                 self.recv_a2s_challenge(server_response, server_info)
                 return
 
-            if first_byte == self.a2s_player_reply:
+            if first_byte == self.a2s_player_reply_byte:
                 self.recv_a2s_player(server_response, server_info)
                 return
 
@@ -150,8 +150,8 @@ class Source(DatagramProtocol):
     def send_a2s_info(self, host, port):
         packet = Packet()
         packet.put_long(self.whole_packet)
-        packet.put_byte(self.a2s_info)
-        packet.put_string(self.a2s_info_string)
+        packet.put_byte(self.a2s_info_query_byte)
+        packet.put_string(self.a2s_info_query_str)
         self.transport.write(packet.getvalue(), (host, port))
 
     def recv_a2s_info(self, packet, (host, port)):
@@ -234,7 +234,7 @@ class Source(DatagramProtocol):
 
         packet = Packet()
         packet.put_long(self.whole_packet)
-        packet.put_byte(self.a2s_player)
+        packet.put_byte(self.a2s_player_query_byte)
         packet.put_long(self.server_dict[(str(host) + ":" + str(port))]['challenge'])
         self.transport.write(packet.getvalue(), (host, port))
 
@@ -260,8 +260,8 @@ class Source(DatagramProtocol):
     def send_a2s_challenge(self, host, port):
         packet = Packet()
         packet.put_long(self.whole_packet)
-        packet.put_byte(self.a2s_player)
-        packet.put_long(self.challenge)
+        packet.put_byte(self.a2s_player_query_byte)
+        packet.put_long(self.a2s_challenge_query_byte)
         self.transport.write(packet.getvalue(), (host, port))
 
     def recv_a2s_challenge(self, packet, (host, port)):
