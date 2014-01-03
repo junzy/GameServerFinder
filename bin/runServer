@@ -1,0 +1,59 @@
+#! /usr/bin/env python
+# coding=utf-8
+
+import daemon
+import signal
+import lockfile
+import argparse
+import os
+import sys
+
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parent_dir)
+
+import pygamescanner.main
+
+config_file_name = ''
+log_file_name = ''
+
+
+def restart_server():
+    global config_file_name
+    global log_file_name
+    pygamescanner.main.restart_server(config_file_name, log_file_name)
+
+
+def stop_server():
+    pygamescanner.main.stop_server()
+
+
+def start_server():
+    global config_file_name
+    global log_file_name
+    pygamescanner.main.start_server(config_file_name, log_file_name)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Run all the game scanners by reading the config file')
+    parser.add_argument('-c', '--conf', type=str, help='Name of the file to read configuration from. Defaults to server.cfg', default="server.cfg")
+    parser.add_argument('-l', '--log', type=str, help='Name of the file to store the logs into. Defaults to server.log', default="server.log")
+    argument = parser.parse_args()
+
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    config_file_name = current_path + '/' + argument.conf
+    log_file_name = current_path + '/' + argument.log
+
+    context = daemon.DaemonContext(
+        working_directory=current_path,
+        umask=0o002,
+        pidfile=lockfile.FileLock(current_path + '/gsf.pid')
+    )
+
+    context.signal_map = {
+        signal.SIGTERM: stop_server,
+        signal.SIGHUP: restart_server,
+        signal.SIGUSR1: restart_server,
+    }
+
+    with context:
+        start_server()

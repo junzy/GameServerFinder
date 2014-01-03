@@ -1,0 +1,11 @@
+# coding=utf-8
+
+Twisted>=13.2.0
+lockfile>=0.9.1
+netaddr>=0.7.4
+netifaces>=0.8
+py>=1.4.19
+pytest>=2.5.1
+python-daemon>=1.6
+wsgiref>=0.1.2
+zope.interface>=4.0.5

@@ -1,8 +1,6 @@
 function ModuleNameDisplay() {
 
-    var _this = this;
-    
-    _this.fillTable = function () {
+    fillTable = function () {
         $.ajax({
           url: "JSON/ModuleName.json",
           data: "json",
@@ -11,31 +9,31 @@ function ModuleNameDisplay() {
             }
     })};
     
-    _this.refreshTable = function () {
+    refreshTable = function () {
         if (modules.ModuleName.enabled === false) return;
-        _this.fillTable();
+        fillTable();
         setTimeout(function() {_this.refreshTable();}, parseInt(modules.ModuleName.refreshTime, 10) * 1000);
     };
     
-    _this.createDiv = function () {
+    createDiv = function () {
         //Create the required DIV element and require child element here
         var div = $(document.createElement("div")).attr("id","ModuleNameContent");
         $("#mainContent").append(div);
     };
 
-    _this.removeDiv = function () {
+    removeDiv = function () {
         $("#ModuleNameContent").remove();
     };
 
-    _this.moduleToggle = function () {
+    moduleToggle = function () {
         $("#" + modules.ModuleName.moduleName).toggleClass("gameSelected");
         if($("#" + modules.ModuleName.moduleName).hasClass("gameSelected")) {
             modules.ModuleName.enabled = true;
-            _this.createDiv();
-            _this.refreshTable();
+            createDiv();
+            refreshTable();
         } else {
             modules.ModuleName.enabled = false;
-            _this.removeDiv();
+            removeDiv();
         }
     };
     
@@ -44,12 +42,12 @@ function ModuleNameDisplay() {
     if (modules.ModuleName.defaultEnabled) {
         $("#" + modules.ModuleName.moduleName).addClass("gameSelected");
         modules.ModuleName.enabled = true;
-        _this.createDiv();
-        _this.refreshTable();
+        createDiv();
+        refreshTable();
     }
 }
 
 $(document).ready(function () {
-    var worker = new ModuleNameDisplay();
+    ModuleNameDisplay();
 });
 

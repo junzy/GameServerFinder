@@ -1,9 +1,11 @@
-.blackGold {
-    background-color: black !important;
+.blackGold { background-color: black !important; }
+
+.blackGold #header{
+    color: gold;
 }
 
-.blackGold .mainHeader{
-    background-image: url('../../images/banner.jpg');
+.blackGold #footer {
+    color : gray;
 }
 
 .blackGold a {
@@ -21,39 +23,39 @@
     text-decoration: none;
 }
 
-.blackGold .mainHeader {
-    color: gold;
-}
-
 .blackGold .gameListElement {
     border-color: gray;
-    background-color: gray;
-    opacity:0.5 !important;
+    background-color: rgba(128,128,128,0.8);
     color: white;
 }
 
 .blackGold .gameListElement.gameSelected {
     border-color: gray;
-    background-color: gold;
-    opacity:0.5 !important;
+    background-color: rgba(255,215,0,0.8);
     color: black;
 }
 
 .blackGold .serverList {
     border-color: gray;
+    background-color: rgba(0,0,0,0.2);
 }
 
-.blackGold .mainFooter {
-    color : gray;
+.blackGold .gameTitle {
+    color: gold;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.blackGold #CSContent {
+    background: black url('../../images/csbanner.jpg') no-repeat top left;
 }
 
 .blackGold .csTopRow {
-    background-color : #ffd700;
+    background-color : rgba(255,215,0,0.8);
     color : black;
 }
 
 .blackGold .csRows {
-    background-color : #aa9500;
+    background-color : rgba(170,149,0,0.8);
     color : black;
 }
 
