@@ -1,4 +1,4 @@
-Welcome to pyGameScanner!	{#welcome}
+Welcome to pyGameScanner!
 =====================
 
 This code, written in python, scans the LAN and locates all multiplayer games that are running in in efficient and more importantly fast manner. The idea is to facilitate multiplayer gaming by showing available servers that a player can join.
